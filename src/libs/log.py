@@ -1,5 +1,5 @@
 import os
-from logging import getLogger, StreamHandler, DEBUG, Formatter
+from logging import DEBUG, Formatter, StreamHandler, getLogger
 
 LOGLEVEL = os.getenv("LOGLEVEL", default=DEBUG)
 
@@ -7,7 +7,9 @@ LOGLEVEL = os.getenv("LOGLEVEL", default=DEBUG)
 def get_logger(logger_name):
     logger = getLogger(logger_name)
     handler = StreamHandler()
-    handler.setFormatter(Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+    handler.setFormatter(
+        Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    )
     handler.setLevel(os.getenv("LOGLEVEL", default=LOGLEVEL))
     logger.setLevel(os.getenv("LOGLEVEL", default=LOGLEVEL))
     logger.addHandler(handler)

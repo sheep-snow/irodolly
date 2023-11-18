@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
-
 import aws_cdk as cdk
-from cdk_example.cdk_example_stack import CdkExampleStack
+
+from cdk_stacks.front_stack import IrodollyFrontStack
 
 app = cdk.App()
-CdkExampleStack(app, "CdkExampleStack")
+IrodollyFrontStack(app, "IrodollyFrontStack")
 
 app.synth()

@@ -1,5 +1,5 @@
 {
-    // "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
@@ -24,6 +24,17 @@
         "**/.venv/**": true,
     },
     "workbench.colorTheme": "Monokai",
+    "cSpell.ignorePaths": [
+        "package-lock.json",
+        "node_modules",
+        "vscode-extension",
+        ".git/objects",
+        ".vscode",
+        ".vscode-insiders",
+        ".pytest_cache",
+        ".mypy_cache",
+        "cdk.out"
+    ],
     "cSpell.words": [
         "venv",
         "virtualenvs",
@@ -33,6 +44,7 @@
         "dotenv",
         "scikit",
         "Rekogniton",
+        "pycache",
     ],
     "cSpell.enableFiletypes": [
         "python",
