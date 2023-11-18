@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "EditorConfig.EditorConfig",
+        "streetsidesoftware.code-spell-checker",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "njpwerner.autodocstring",
+        "ms-python.mypy-type-checker",
+        "EditorConfig.EditorConfig",
+        "streetsidesoftware.code-spell-checker",
+    ]
+}

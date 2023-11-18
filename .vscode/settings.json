@@ -1,0 +1,44 @@
+{
+    // "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.wordBasedSuggestions": false
+    },
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
+    "python.languageServer": "Pylance",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/.hg/store/**": true,
+        "**/.venv/**": true,
+    },
+    "workbench.colorTheme": "Monokai",
+    "cSpell.words": [
+        "venv",
+        "virtualenvs",
+        "irodolly",
+        "textlint",
+        "stepfunctions",
+        "dotenv",
+        "scikit",
+        "Rekogniton",
+    ],
+    "cSpell.enableFiletypes": [
+        "python",
+        "json",
+        "yaml",
+        "javascript",
+        "md",
+    ],
+}
