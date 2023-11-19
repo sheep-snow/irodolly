@@ -43,7 +43,7 @@ Histogram Features applied to ImageNet Database](https://www.lab.kochi-tech.ac.j
   * 言語化 - 画像にかかれている内容を言語化した数種類の単語のキーワードマップ表現
   * 感情 - 言語化結果をもとに、画像の表現内容がポジティブ・ネガティブどちらにどの程度寄るかを示すチャート
   * スタイル - 予め定義済(how?)の画像の作風・スタイルを示す単語のリストまたはHexChart表現
-  * センシティブ半知恵
+  * センシティブ
 
 # implements ideas
 
@@ -62,5 +62,7 @@ Histogram Features applied to ImageNet Database](https://www.lab.kochi-tech.ac.j
     * GCP Natural Language API
   * スタイル
     * TBD, 多分OpenCV, Rekognition + animeface-character-datasetなどによるモデル作成が必要
+  * センシティブ
+    * Rekognition
 * プレゼンテーション
   * streamlit, Figma
