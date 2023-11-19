@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "debug",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/debug_entrypoint.py",
+            "console": "integratedTerminal",
+            "env": {
+                "AWS_PROFILE": "dev",
+            },
+            "args": []
+        }
+    ]
+}
