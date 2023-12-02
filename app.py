@@ -1,8 +1,8 @@
 import aws_cdk as cdk
 
-from cdk_stacks.front_stack import IrodollyFrontStack
+from cdk_stacks.resize_stack import IrodollyResizeStack
 
 app = cdk.App()
-IrodollyFrontStack(app, "IrodollyFrontStack")
+IrodollyResizeStack(app, "IrodollyFrontStack")
 
 app.synth()

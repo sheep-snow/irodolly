@@ -1,6 +1,7 @@
 import json
 
 from libs.log import get_logger
+from
 
 log = get_logger(__name__)
 
@@ -8,7 +9,6 @@ log = get_logger(__name__)
 def handler(event, context):
     """Resizes uploaded image"""
     event_json_string = json.dumps(event)
-    # TODO implement it
     log.info(f"request: {event_json_string}")
     return {
         "statusCode": 200,

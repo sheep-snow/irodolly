@@ -1,7 +1,16 @@
 # irodolly
 funcy analytics features for painting
 
+# Environment Required
 
+* docker service - https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script
+* python 3.11
+* poetry
+
+```
+$ poetry shell
+$ cdk ls
+```
 
 # CDK Python
 

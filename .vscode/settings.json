@@ -22,6 +22,7 @@
         "**/node_modules/*/**": true,
         "**/.hg/store/**": true,
         "**/.venv/**": true,
+        "**/cdk.out/**": true,
     },
     "workbench.colorTheme": "Monokai",
     "cSpell.ignorePaths": [
