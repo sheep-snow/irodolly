@@ -46,6 +46,9 @@
         "scikit",
         "Rekogniton",
         "pycache",
+        "boto3",
+        "imread",
+        "imwrite",
     ],
     "cSpell.enableFiletypes": [
         "python",
