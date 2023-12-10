@@ -49,6 +49,7 @@
         "boto3",
         "imread",
         "imwrite",
+        "mediapipe",
     ],
     "cSpell.enableFiletypes": [
         "python",

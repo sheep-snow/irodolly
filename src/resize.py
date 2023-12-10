@@ -4,7 +4,7 @@ from pathlib import PurePosixPath
 from urllib.parse import unquote_plus
 from uuid import uuid4
 
-import boto3
+import boto3  # type: ignore
 import cv2
 
 from libs.log import get_logger

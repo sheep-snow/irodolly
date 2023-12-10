@@ -1,5 +1,6 @@
 # from aws_cdk import aws_apigateway as apigw
-from aws_cdk import Duration, Stack, aws_iam
+from aws_cdk import Duration, Stack
+from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
 from aws_cdk import aws_lambda_event_sources as lambda_events
 from aws_cdk import aws_s3 as s3
@@ -22,13 +23,13 @@ class IrodollyResizeStack(Stack):
 
         LAMBDA_TIMEOUT = 60
 
-        # 処理失敗時の DLQ (Optional)
+        # dead letter queue for the upload event queue
         dlq = sqs.Queue(
             self, id="dead_letter_queue_id", retention_period=Duration.days(7)
         )
         dead_letter_queue = sqs.DeadLetterQueue(max_receive_count=1, queue=dlq)
 
-        # S3 アップロードイベント
+        # s3 upload event queue
         upload_queue = sqs.Queue(
             self,
             id="sample_queue_id",
@@ -39,10 +40,10 @@ class IrodollyResizeStack(Stack):
             upload_queue, raw_message_delivery=True
         )
         upload_event_topic = sns.Topic(self, id="sample_sns_topic_id")
-        # This binds the SNS Topic to the SQS Queue
+        # binds the SNS Topic to the SQS Queue
         upload_event_topic.add_subscription(sqs_subscription)
 
-        # S3 Bucket
+        # cost save rule for the bucket
         lifecycle_rules = [
             s3.LifecycleRule(
                 enabled=True,
@@ -59,6 +60,7 @@ class IrodollyResizeStack(Stack):
                 ],
             )
         ]
+        # s3 bucket as an uploading destination
         s3_bucket = s3.Bucket(
             self,
             id=f"{__name__}-sample-bucket",
@@ -66,39 +68,25 @@ class IrodollyResizeStack(Stack):
             versioned=True,
             lifecycle_rules=lifecycle_rules,
         )
-
-        # Note: If you don't specify a filter all uploads will trigger an event.
-        #       Also, modifying the event type will handle other object operations
-        # This binds the S3 bucket to the SNS Topic
         s3_bucket.add_event_notification(
             s3.EventType.OBJECT_CREATED_PUT,
             s3n.SnsDestination(upload_event_topic),
-            s3.NotificationKeyFilter(prefix="uploads", suffix=".csv"),
-        )
-        function = _lambda.Function(
-            self,
-            "lambda_function",
-            runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="lambda_function.handler",
-            code=_lambda.Code.from_asset(path=lambda_dir),
-            timeout=Duration.seconds(LAMBDA_TIMEOUT),
+            s3.NotificationKeyFilter(prefix="uploads", suffix=".jpg"),
         )
 
-        # This binds the lambda to the SQS Queue
-        invoke_event_source = lambda_events.SqsEventSource(upload_queue)
-        function.add_event_source(invoke_event_source)
-
-        resize_lambda_role = aws_iam.Role(
+        # role for the lambda
+        resize_lambda_role = iam.Role(
             self,
             "lambdaRole",
             role_name="resize_lambda_role",
-            assumed_by=aws_iam.ServicePrincipal("lambda.amazonaws.com"),
+            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
         )
         resize_lambda_role.add_managed_policy(
-            aws_iam.ManagedPolicy.from_aws_managed_policy_name("AWSLambdaExecute")
+            iam.ManagedPolicy.from_aws_managed_policy_name("AWSLambdaExecute")
         )
-
-        upload_event_topic = sns.Topic(self, id="sample_sns_topic_id")
+        resize_lambda_role.add_managed_policy(
+            iam.ManagedPolicy.from_aws_managed_policy_name("AWSLambdaExecute")
+        )
 
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_lambda/DockerImageFunction.html
         resize_lambda = _lambda.DockerImageFunction(
@@ -111,7 +99,11 @@ class IrodollyResizeStack(Stack):
             ),
             role=resize_lambda_role,
             timeout=Duration.seconds(10),
-            memory_size=128,
+            memory_size=512,
             retry_attempts=0,
+            description="",
             environment={"APP_NAME": "resize_function"},
         )
+        # This binds the lambda to the SQS Queue
+        invoke_event_source = lambda_events.SqsEventSource(upload_queue)
+        resize_lambda.add_event_source(invoke_event_source)
