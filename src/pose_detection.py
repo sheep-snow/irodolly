@@ -48,12 +48,12 @@ def draw_landmarks_on_image(rgb_image, detection_result):
 
 
 def handler(event, _):
+    begin_time = dt.utcnow()
     event_json_string = json.dumps(event)
-    log.info(f"request: {event_json_string}")
+    log.debug(f"request: {event_json_string}")
 
     bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
     key = unquote_plus(event["Records"][0]["s3"]["object"]["key"], encoding="utf-8")
-    bucket = s3.Bucket(bucket_name)
     log.info(f"Inputted Image: {bucket_name}/{key}")
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -75,6 +75,24 @@ def handler(event, _):
             bucket.download_fileobj(key, f)
             log.debug(f"The object `{key}` downloaded to {str(save_path)}.")
 
-    draw_landmarks_on_image({}, {})
+        result_image_path = draw_landmarks_on_image({}, {})
 
-    return {"statusCode": 200, "headers": {"Content-Type": "text/plain"}}
+        log.debug(f"processed image cerated to `{result_image_path}` .")
+        log.debug(f"uploading...")
+        target_key = f"result/{result_image_path.name}"
+        s3.upload_file(
+            Filename=result_image_path.as_posix(),
+            Bucket=bucket_name,
+            Key=target_key,
+        )
+        log.info(f"Uploaded to `{bucket_name}/{target_key}` .")
+        log.debug(f"processed seconds: {(dt.utcnow()-begin_time).seconds}")
+
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "output": {
+            "bucket": bucket_name,
+            "key": target_key,
+        },
+    }

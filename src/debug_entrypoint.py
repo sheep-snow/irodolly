@@ -1,7 +1,7 @@
-from pose_detection import handler
+from resize import handler
 
 bucket_name = "testbucket-for-opencv-irodolly"
-key = "i56.jpg"
+key = "target/i56.jpg"
 
 if __name__ == "__main__":
     handler(
